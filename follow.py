@@ -11,10 +11,3 @@ def follow(thefile):
             		time.sleep(0.1)
             		continue
         	yield line
-
-if __name__ == '__main__':
-	logfile = open("/var/log/nat.log","r")
-    	loglines = follow(logfile)
-    	for line in loglines:
-        	print line,
-
