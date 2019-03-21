@@ -3,7 +3,7 @@
 # Name: WatchmanFW
 #
 # Author:  Tomasz Kruk   futszak@gmail.com
-# version 0.15
+# version 0.16
 
 import signal
 import sys
@@ -36,12 +36,6 @@ def whitelist(line):
 def timestamp():
     a = int(float(time.time()))
     return(a)
-
-def addadresstofile(ip):
-    with open(config.config['ADRESSFILE'], "a") as text_file:
-        line = str(timestamp())+("#")+ip+("\n")
-        text_file.write(line)
-        text_file.close()
 
 def isonlist(ip,api,list_queues):
     list_queues = api.get_resource('/ip/firewall/address-list')
