@@ -1,0 +1,97 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author:  Tomasz Kruk   futszak@gmail.com
+# version 0.12
+
+import signal
+import sys
+import os
+import follow
+import time
+import sndmail
+import socket
+import config
+
+def signal_handler(signal, frame):
+        print('You pressed Ctrl+C!')
+        sys.exit(0)
+
+def logsend(s):
+    """Write log."""
+    nt = (config.config['PROCNAME'])+" "+str((int(time.time())))+': '
+    ip = config.config['UDP_IP']
+    port = config.config['UDP_PORT']
+    sock.sendto((nt+str(s)+'\n'), (ip, port))
+
+def whitelist(line):
+    a,b=line.split("from")
+    c,d=b.split("port")
+    ip=(c.replace(" ", ""))
+    # print(ip)
+    addip(ip)
+
+def wlpk(line):
+    a,c=line.split("trump-php")
+    ip=(c.replace(" ", ""))
+    ip = ip.replace("\r","")
+    ip = ip.replace("\n","")
+    # print(ip)
+    addip(ip)
+
+def timestamp():
+    a = int(float(time.time()))
+    return(a)
+
+def addadresstofile(ip):
+    with open(config.config['ADRESSFILE'], "a") as text_file:
+        line = str(timestamp())+("#")+ip+("\n")
+        text_file.write(line)
+        text_file.close()
+
+def isonlist(ip):
+    tr = 0
+    # print(ip)
+    with open(config.config['ADRESSFILE'], "r") as ins:
+        for line in ins:
+            try:
+                t,i=line.split("#")
+            except:
+                break
+            tnt = int(t)+config.config['TIMEOUT']
+            if tnt > timestamp():
+                if ip == i.replace("\n",""):
+                    tr = 1
+        if tr:
+            return(1)
+        else:
+            return(0)
+
+def addip(ip):
+    # if isonlist(ip):
+    #     print("Address is already on list")
+    polecenie=config.config['WHITELISTBEGIN']+ip+config.config['WHITELISTEND']
+    # polecenie2=config.config['WHITELISTBEGIN2']+ip+config.config['WHITELISTEND']
+    os.system(polecenie)
+    # os.system(polecenie2)
+    # sndmail.sndmail(ip+" added to whitelist on Jelcyn and Putin on 1 day",'futszak@gmail.com',line)
+    # addadresstofile(ip)
+
+
+signal.signal(signal.SIGINT, signal_handler)
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # for UDP logging
+
+pid = str(os.getpid())
+
+if os.path.isfile(config.config['PIDFILE']):
+    os.remove(config.config['PIDFILE'])
+file(config.config['PIDFILE'], 'w').write(pid)
+logsend("Service start at PID "+str(pid))
+# sndmail.sndmail("Starting at pid "+str(pid),'futszak@gmail.com',config.config['NOCONTENT'])
+
+if __name__ == '__main__':
+    logfile = open(config.config['LOGFILE'],"r")
+    loglines = follow.follow(logfile)
+    for line in loglines:
+        if "lolek" in line:
+            if "Accepted password for futszak" in line:
+                whitelist(line)
