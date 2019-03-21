@@ -3,7 +3,7 @@
 # Name: WatchmanFW
 #
 # Author:  Tomasz Kruk   futszak@gmail.com
-# version 0.16
+# version 0.18
 
 import signal
 import sys
@@ -12,8 +12,11 @@ import follow
 import time
 import sndmail
 import socket
-import config
 import routeros_api
+import configparser
+
+configini = configparser.ConfigParser()
+configini.read('watchmanfw.ini')
 
 def signal_handler(signal, frame):
         print('You pressed Ctrl+C!')
@@ -21,10 +24,16 @@ def signal_handler(signal, frame):
 
 def logsend(s):
     """Write log."""
-    nt = (config.config['PROCNAME'])+" "+str((int(time.time())))+': '
-    ip = config.config['UDP_IP']
-    port = config.config['UDP_PORT']
-    sock.sendto((nt+str(s)+'\n'), (ip, port))
+    try:
+        port = int(configini['syslog']['port'])
+    except:
+        port = 514
+    try:
+        nt = (configini['script']['procname'])+" "+str((int(time.time())))+': '
+        ip = configini['syslog']['address']
+        sock.sendto((nt+str(s)+'\n'), (ip, port))
+    except:
+        print ("no logs")
 
 def whitelist(line):
     a,b=line.split("from")
@@ -59,14 +68,14 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # for UDP logging
 
 pid = str(os.getpid())
 
-if os.path.isfile(config.config['PIDFILE']):
-    os.remove(config.config['PIDFILE'])
-file(config.config['PIDFILE'], 'w').write(pid)
+if os.path.isfile(configini['script']['pidfile']):
+    os.remove(configini['script']['pidfile'])
+file(configini['script']['pidfile'], 'w').write(pid)
 logsend("Service start at PID "+str(pid))
 # sndmail.sndmail("Starting at pid "+str(pid),'futszak@gmail.com',config.config['NOCONTENT'])
 
 if __name__ == '__main__':
-    logfile = open(config.config['LOGFILE'],"r")
+    logfile = open(configini['syslog']['logfile'],"r")
     loglines = follow.follow(logfile)
     for line in loglines:
         if "lolek" in line:
