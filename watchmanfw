@@ -3,14 +3,13 @@
 # Name: WatchmanFW
 #
 # Author:  Tomasz Kruk   futszak@gmail.com
-# version 0.18
+# version 0.19
 
 import signal
 import sys
 import os
 import follow
 import time
-import sndmail
 import socket
 import routeros_api
 import configparser
@@ -54,13 +53,18 @@ def isonlist(ip,api,list_queues):
     return(0)
 
 def addip(ip):
-    connection = routeros_api.RouterOsApiPool('192.168.0.20', username='robot', password='maszyna')
+    address = configini['mikrotik']['address']
+    username = configini['mikrotik']['username']
+    password = configini['mikrotik']['password']
+    whitelist = configini['mikrotik']['whitelist']
+    timeout = configini['mikrotik']['timeout']
+    connection = routeros_api.RouterOsApiPool(address, username=username, password=password)
     api = connection.get_api()
     list_queues = api.get_resource('/ip/firewall/address-list')
     if isonlist(ip,api,list_queues):
         print("Address is already on list")
     else:
-        list_queues.add(address=ip, list="whitelist", timeout="1d")
+        list_queues.add(address=ip, list=whitelist, timeout=timeout)
 
 
 signal.signal(signal.SIGINT, signal_handler)
@@ -72,7 +76,6 @@ if os.path.isfile(configini['script']['pidfile']):
     os.remove(configini['script']['pidfile'])
 file(configini['script']['pidfile'], 'w').write(pid)
 logsend("Service start at PID "+str(pid))
-# sndmail.sndmail("Starting at pid "+str(pid),'futszak@gmail.com',config.config['NOCONTENT'])
 
 if __name__ == '__main__':
     logfile = open(configini['syslog']['logfile'],"r")
