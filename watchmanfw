@@ -13,6 +13,7 @@ import time
 import sndmail
 import socket
 import config
+import routeros_api
 
 def signal_handler(signal, frame):
         print('You pressed Ctrl+C!')
@@ -50,33 +51,21 @@ def addadresstofile(ip):
         text_file.write(line)
         text_file.close()
 
-def isonlist(ip):
-    tr = 0
-    # print(ip)
-    with open(config.config['ADRESSFILE'], "r") as ins:
-        for line in ins:
-            try:
-                t,i=line.split("#")
-            except:
-                break
-            tnt = int(t)+config.config['TIMEOUT']
-            if tnt > timestamp():
-                if ip == i.replace("\n",""):
-                    tr = 1
-        if tr:
+def isonlist(ip,api,list_queues):
+    list_queues = api.get_resource('/ip/firewall/address-list')
+    for a in list_queues.get():
+        if ((a['address']) == ip):
             return(1)
-        else:
-            return(0)
+    return(0)
 
 def addip(ip):
-    # if isonlist(ip):
-    #     print("Address is already on list")
-    polecenie=config.config['WHITELISTBEGIN']+ip+config.config['WHITELISTEND']
-    # polecenie2=config.config['WHITELISTBEGIN2']+ip+config.config['WHITELISTEND']
-    os.system(polecenie)
-    # os.system(polecenie2)
-    # sndmail.sndmail(ip+" added to whitelist on Jelcyn and Putin on 1 day",'futszak@gmail.com',line)
-    # addadresstofile(ip)
+    connection = routeros_api.RouterOsApiPool('192.168.0.20', username='robot', password='maszyna')
+    api = connection.get_api()
+    list_queues = api.get_resource('/ip/firewall/address-list')
+    if isonlist(ip,api,list_queues):
+        print("Address is already on list")
+    else:
+        list_queues.add(address=ip, list="whitelist", timeout="1d")
 
 
 signal.signal(signal.SIGINT, signal_handler)
