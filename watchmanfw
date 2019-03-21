@@ -3,7 +3,7 @@
 # Name: WatchmanFW
 #
 # Author:  Tomasz Kruk   futszak@gmail.com
-# version 0.13
+# version 0.15
 
 import signal
 import sys
@@ -30,14 +30,6 @@ def whitelist(line):
     a,b=line.split("from")
     c,d=b.split("port")
     ip=(c.replace(" ", ""))
-    # print(ip)
-    addip(ip)
-
-def wlpk(line):
-    a,c=line.split("trump-php")
-    ip=(c.replace(" ", ""))
-    ip = ip.replace("\r","")
-    ip = ip.replace("\n","")
     # print(ip)
     addip(ip)
 
