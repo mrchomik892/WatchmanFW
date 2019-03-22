@@ -3,7 +3,7 @@
 # Name: WatchmanFW
 #
 # Author:  Tomasz Kruk   futszak@gmail.com
-# version 0.21
+# version 0.22
 
 import signal
 import sys
@@ -11,6 +11,7 @@ import os
 import follow
 import time
 import socket
+import sndmail
 import routeros_api
 import configparser
 
@@ -38,7 +39,7 @@ def whitelist(line):
     a,b=line.split("from")
     c,d=b.split("port")
     ip=(c.replace(" ", ""))
-    addip(ip)
+    addip(ip,line)
 
 def timestamp():
     a = int(float(time.time()))
@@ -52,12 +53,20 @@ def isonlist(ip,api,list_queues):
                 return(1)
     return(0)
 
-def addip(ip):
+def addip(ip,line):
     address = configini['mikrotik']['address']
     username = configini['mikrotik']['username']
     password = configini['mikrotik']['password']
     whitelist = configini['mikrotik']['whitelist']
     timeout = configini['mikrotik']['timeout']
+    try:
+        sender = configini['email']['sender']
+        reciever = configini['email']['reciever']
+        hostname = configini['email']['server']
+        mail = True
+    except:
+        mail = False
+    subject = ip + " added to "+whitelist
     connection = routeros_api.RouterOsApiPool(address, username=username, password=password)
     api = connection.get_api()
     list_queues = api.get_resource('/ip/firewall/address-list')
@@ -65,7 +74,8 @@ def addip(ip):
         print("Address is already on the list")
     else:
         list_queues.add(address=ip, list=whitelist, timeout=timeout)
-
+        if mail:
+            sndmail.sndmail(hostname,sender,reciever,subject,line)
 
 signal.signal(signal.SIGINT, signal_handler)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # for UDP logging
@@ -85,3 +95,4 @@ if __name__ == '__main__':
             if configini['machine']['lstring'] in line:
                 if configini['machine']['user']:
                     whitelist(line)
+# sndmail.sndmail("localhost","watchmanfw@menel.tkruk.it","futszak@gmail.com","temat")
