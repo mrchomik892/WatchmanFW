@@ -3,7 +3,7 @@
 # Name: WatchmanFW
 #
 # Author:  Tomasz Kruk   futszak@gmail.com
-# version 0.20
+# version 0.21
 
 import signal
 import sys
@@ -62,7 +62,7 @@ def addip(ip):
     api = connection.get_api()
     list_queues = api.get_resource('/ip/firewall/address-list')
     if isonlist(ip,api,list_queues):
-        print("Address is already on list")
+        print("Address is already on the list")
     else:
         list_queues.add(address=ip, list=whitelist, timeout=timeout)
 
@@ -81,6 +81,7 @@ if __name__ == '__main__':
     logfile = open(configini['syslog']['logfile'],"r")
     loglines = follow.follow(logfile)
     for line in loglines:
-        if "lolek" in line:
-            if "Accepted password for futszak" in line:
-                whitelist(line)
+        if configini['machine']['name'] in line:
+            if configini['machine']['lstring'] in line:
+                if configini['machine']['user']:
+                    whitelist(line)
