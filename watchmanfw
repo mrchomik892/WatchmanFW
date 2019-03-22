@@ -49,7 +49,8 @@ def isonlist(ip,api,list_queues):
     list_queues = api.get_resource('/ip/firewall/address-list')
     for a in list_queues.get():
         if ((a['address']) == ip):
-            return(1)
+            if (a['list'] == configini['mikrotik']['whitelist']):
+                return(1)
     return(0)
 
 def addip(ip):
