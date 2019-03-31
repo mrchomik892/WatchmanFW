@@ -22,6 +22,16 @@ def signal_handler(signal, frame):
         print('You pressed Ctrl+C!')
         sys.exit(0)
 
+def getmails():
+    files = []
+    for r, d, f in os.walk('.'):
+        for file in f:
+            if '@' in file:
+                files.append(os.path.join(file))
+
+    return(files)
+
+
 def logsend(s):
     """Write log."""
     try:
@@ -87,12 +97,33 @@ if os.path.isfile(configini['script']['pidfile']):
 file(configini['script']['pidfile'], 'w').write(pid)
 logsend("Service start at PID "+str(pid))
 
-if __name__ == '__main__':
-    logfile = open(configini['syslog']['logfile'],"r")
-    loglines = follow.follow(logfile)
-    for line in loglines:
-        if configini['machine']['name'] in line:
-            if configini['machine']['lstring'] in line:
-                if configini['machine']['user']:
-                    whitelist(line)
+mails = getmails()
+stringtab = [("a","b","futszak@gmail.com"),("a","b","c","tomek.futszak@gmail.com")]
+# print(type(stringtab))
+def stringexist(line):
+    for string in stringtab:
+        # print(len(string))
+        # print("for:")
+        for position in range(0,len(string)-1):
+            # print(string[position])
+            if not string[position] in line:
+                print("zwroci falsz")
+                return(False)
+        return (string[len(string)-1])
+    return(line)
+
+print(stringexist("lbcinia"))
+
+
+# if __name__ == '__main__':
+#     logfile = open(configini['syslog']['logfile'],"r")
+#     loglines = follow.follow(logfile)
+#     for line in loglines:
+#         if configini['machine']['name'] in line:
+#             if configini['machine']['lstring'] in line:
+#                 if configini['machine']['user']:
+#                     whitelist(line)
+#         if stringexist(line):
+#             # sndmail.sndmail("localhost","watchmanfw@menel.tkruk.it",mail,line)
+#             print(stringexist(line))
 # sndmail.sndmail("localhost","watchmanfw@menel.tkruk.it","futszak@gmail.com","temat")
