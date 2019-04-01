@@ -16,7 +16,7 @@ import routeros_api
 import configparser
 
 configini = configparser.ConfigParser()
-configini.read('watchmanfw.ini')
+configini.read('/etc/watchmanfw/watchmanfw.ini')
 
 def signal_handler(signal, frame):
         print('You pressed Ctrl+C!')
@@ -28,7 +28,6 @@ def getmails():
         for file in f:
             if '@' in file:
                 files.append(os.path.join(file))
-
     return(files)
 
 
@@ -104,10 +103,12 @@ def getstringtab():
 
 stringtab = getstringtab()
 
+
 def stringexist(line):
     emails = []
     for string in stringtab:
-        include = True
+        if not (string[0]==''):
+            include = True
         for position in range(0,len(string)-1):
             if not string[position] in line:
                 include = False
@@ -125,6 +126,7 @@ if os.path.isfile(configini['script']['pidfile']):
     os.remove(configini['script']['pidfile'])
 file(configini['script']['pidfile'], 'w').write(pid)
 logsend("Service start at PID "+str(pid))
+sndmail.sndmail(configini['email']['server'],configini['email']['sender'],configini['email']['reciever'],"Service start at PID "+str(pid))
 
 if __name__ == '__main__':
     logfile = open(configini['syslog']['logfile'],"r")
@@ -137,5 +139,4 @@ if __name__ == '__main__':
         if stringexist(line):
             for email in stringexist(line):
                 sndmail.sndmail("localhost","watchmanfw@menel.tkruk.it",email,line)
-
-# sndmail.sndmail("localhost","watchmanfw@menel.tkruk.it","futszak@gmail.com","temat")
+                # print(line)
