@@ -87,6 +87,35 @@ def addip(ip,line):
         if mail:
             sndmail.sndmail(hostname,sender,reciever,subject,line)
 
+
+def getstringtab():
+    stringtab = []
+    for mail in getmails():
+        lines = [line.rstrip('\n') for line in open(mail)]
+        # loop in lines
+        for line in lines:
+            # loop in line
+            record = ()
+            for lstrint in line.split(","):
+                record = record + (lstrint,)
+            record = record + (mail,)
+            stringtab.append(record)
+    return(stringtab)
+
+stringtab = getstringtab()
+
+def stringexist(line):
+    emails = []
+    for string in stringtab:
+        include = True
+        for position in range(0,len(string)-1):
+            if not string[position] in line:
+                include = False
+        if include:
+            emails.append(str(string[len(string)-1]))
+    return(emails)
+
+
 signal.signal(signal.SIGINT, signal_handler)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # for UDP logging
 
@@ -97,33 +126,16 @@ if os.path.isfile(configini['script']['pidfile']):
 file(configini['script']['pidfile'], 'w').write(pid)
 logsend("Service start at PID "+str(pid))
 
-mails = getmails()
-stringtab = [("a","b","futszak@gmail.com"),("a","b","c","tomek.futszak@gmail.com")]
-# print(type(stringtab))
-def stringexist(line):
-    for string in stringtab:
-        # print(len(string))
-        # print("for:")
-        for position in range(0,len(string)-1):
-            # print(string[position])
-            if not string[position] in line:
-                print("zwroci falsz")
-                return(False)
-        return (string[len(string)-1])
-    return(line)
+if __name__ == '__main__':
+    logfile = open(configini['syslog']['logfile'],"r")
+    loglines = follow.follow(logfile)
+    for line in loglines:
+        if configini['machine']['name'] in line:
+            if configini['machine']['lstring'] in line:
+                if configini['machine']['user']:
+                    whitelist(line)
+        if stringexist(line):
+            for email in stringexist(line):
+                sndmail.sndmail("localhost","watchmanfw@menel.tkruk.it",email,line)
 
-print(stringexist("lbcinia"))
-
-
-# if __name__ == '__main__':
-#     logfile = open(configini['syslog']['logfile'],"r")
-#     loglines = follow.follow(logfile)
-#     for line in loglines:
-#         if configini['machine']['name'] in line:
-#             if configini['machine']['lstring'] in line:
-#                 if configini['machine']['user']:
-#                     whitelist(line)
-#         if stringexist(line):
-#             # sndmail.sndmail("localhost","watchmanfw@menel.tkruk.it",mail,line)
-#             print(stringexist(line))
 # sndmail.sndmail("localhost","watchmanfw@menel.tkruk.it","futszak@gmail.com","temat")
