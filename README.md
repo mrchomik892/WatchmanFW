@@ -37,7 +37,7 @@ Apr  2 09:25:44 menel sshd[31688]: Received disconnect from 218.89.241.68 port 3
 
 Apr  2 09:25:44 menel sshd[31688]: Disconnected from 218.89.241.68 port 34030 [preauth]
 
-Apr  2 09:25:49 menel sshd[31690]: Accepted password for boss from 79.184.14.173 port 57860 ssh2
+Apr  2 09:25:49 menel sshd[31690]: Accepted password for trainee from 79.184.14.173 port 57860 ssh2
 
 
 In logs is many information about failed login attempts, this is information noiss. If i have small server (example VPS on qnap disk storage), important information (in real time) for me is about successful login attempt.
@@ -47,12 +47,12 @@ Warchmanfw reading in real time there information and checks compliance with sta
 
 example1:
 
-/etc/watchmanfw/boss@mydomain.com:
+/etc/watchmanfw/trainee@mydomain.com:
 
-menel,Accepted password for boss
+menel,Accepted password for trainee
 
 
-If on machine menel user boss was logged (strings "menel" and "Accepted password for boss") watchmanfw sending email to user boss@mydomain.com witch information about this.
+If on machine menel ustrainee was logged (strings "menel" and "Accepted password for trainee") watchmanfw sending email to user trainee@mydomain.com witch information about this.
 
 
 example2:
@@ -62,4 +62,4 @@ example2:
 menel,Accepted password for
 
 
-If on machine menel any user (also boss) was logged (strings "menel" and "Accepted password for") watchmanfw sending email to user admin@mydomain.com witch information about this.
+If on machine menel any user (also trainee) was logged (strings "menel" and "Accepted password for") watchmanfw sending email to user admin@mydomain.com witch information about this.
