@@ -8,9 +8,8 @@ Simple scripts for security in computer networks
 
 ## Quick install:
 
-git clone https://github.com/futszak/WatchmanFW.git
-
-cd WatchmanFW
+    git clone https://github.com/futszak/WatchmanFW.git
+    cd WatchmanFW
 
 chmod u+x watchmanfw
 
