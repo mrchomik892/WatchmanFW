@@ -8,7 +8,7 @@ Requirements:
 - Mailserver (if You want recieved messages on email)
 - Python3
 
-Quick install:
+# Quick install:
 
 git clone https://github.com/futszak/WatchmanFW.git
 
