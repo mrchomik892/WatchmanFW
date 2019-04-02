@@ -10,10 +10,11 @@ Requirements:
 
 # Quick install:
 
-+
+
 git clone https://github.com/futszak/WatchmanFW.git
-cd WatchmanFW
 +
+cd WatchmanFW
+
 chmod u+x watchmanfw
 
 mv watchmanfw-sample.ini watchmanfw.ini
