@@ -110,3 +110,15 @@ add address=watchmanfw_address list=whitelist
 add action=accept chain=input comment="pass syn packets for whitelist" dst-address-list=my protocol=tcp src-address-list=whitelist
 
 add action=drop chain=input comment="drop all if no whitelist" dst-address-list=my protocol=tcp
+
+# files
+
+follow.py - function for reading syslog files
+
+sndmail.py - function for sending mails
+
+watchmanfw - main script
+
+watchmanfw.ini - config for main script
+
+watchmanFW.png - functionality on graphic
