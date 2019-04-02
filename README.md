@@ -7,7 +7,7 @@ Simple scripts for security in computer networks
 - Python3
 
 ## Quick install:
-###
+###a
 git clone https://github.com/futszak/WatchmanFW.git
 cd WatchmanFW
 chmod u+x watchmanfw
