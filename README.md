@@ -33,7 +33,7 @@ Warchmanfw reading in real time there information and checks compliance with sta
 
 If on machine menel ustr trainee was logged (strings "menel" and "Accepted password for trainee") watchmanfw sending email to user trainee@mydomain.com witch information about this.
 
-    example 2:
+### Example 2:
     /etc/watchmanfw/admin@mydomain.com:
     menel,Accepted password for
 
