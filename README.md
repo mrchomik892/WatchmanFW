@@ -26,7 +26,7 @@ In logs is many information about failed login attempts, this is information noi
 
 Warchmanfw reading in real time there information and checks compliance with standard strings.
 
-###example 1:
+### Example 1:
 
     /etc/watchmanfw/trainee@mydomain.com:
     menel,Accepted password for trainee
