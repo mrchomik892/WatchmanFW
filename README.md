@@ -12,7 +12,7 @@ Requirements:
 
 
 git clone https://github.com/futszak/WatchmanFW.git
-+
+
 cd WatchmanFW
 
 chmod u+x watchmanfw
