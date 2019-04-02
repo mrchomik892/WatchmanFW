@@ -3,7 +3,7 @@
 # Name: WatchmanFW
 #
 # Author:  Tomasz Kruk   futszak@gmail.com
-# version 0.22
+# version 0.23
 
 import signal
 import sys
@@ -126,7 +126,10 @@ if os.path.isfile(configini['script']['pidfile']):
     os.remove(configini['script']['pidfile'])
 file(configini['script']['pidfile'], 'w').write(pid)
 logsend("Service start at PID "+str(pid))
-sndmail.sndmail(configini['email']['server'],configini['email']['sender'],configini['email']['reciever'],"Service start at PID "+str(pid))
+eserver = configini['email']['server']
+esender = configini['email']['sender']
+ereciever = configini['email']['reciever']
+sndmail.sndmail(eserver,esender,ereciever,"Service start at PID "+str(pid))
 
 if __name__ == '__main__':
     logfile = open(configini['syslog']['logfile'],"r")
@@ -139,4 +142,3 @@ if __name__ == '__main__':
         if stringexist(line):
             for email in stringexist(line):
                 sndmail.sndmail("localhost","watchmanfw@menel.tkruk.it",email,line)
-                # print(line)
