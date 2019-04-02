@@ -13,7 +13,7 @@ Simple scripts for security in computer networks
     (edit watchmanfw.ini)
     ./watchmanfw &
 ## How its works ?
-    Syslog on linux machine recieved information (in UDP datagrams) about operations on local machine and on remote machines  and writing in one or many files (look at /etc/rsyslog.conf).
+   Syslog on linux machine recieved information (in UDP datagrams) about operations on local machine and on remote machines  and writing in one or many files (look at /etc/rsyslog.conf).
 
     Apr  2 09:25:42 menel sshd[31688]: pam_unix(sshd:auth): check pass; user unknown
     Apr  2 09:25:42 menel sshd[31688]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=218.89.241.68
