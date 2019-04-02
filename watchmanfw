@@ -3,7 +3,7 @@
 # Name: WatchmanFW
 #
 # Author:  Tomasz Kruk   futszak@gmail.com
-# version 0.23
+# version 0.25
 
 import signal
 import sys
@@ -102,8 +102,6 @@ def getstringtab():
     return(stringtab)
 
 stringtab = getstringtab()
-
-
 def stringexist(line):
     emails = []
     for string in stringtab:
@@ -119,7 +117,6 @@ def stringexist(line):
 
 signal.signal(signal.SIGINT, signal_handler)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # for UDP logging
-
 pid = str(os.getpid())
 
 if os.path.isfile(configini['script']['pidfile']):
@@ -141,4 +138,4 @@ if __name__ == '__main__':
                     whitelist(line)
         if stringexist(line):
             for email in stringexist(line):
-                sndmail.sndmail("localhost","watchmanfw@menel.tkruk.it",email,line)
+                sndmail.sndmail(eserver,esender,email,line)
