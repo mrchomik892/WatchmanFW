@@ -2,7 +2,7 @@
 Simple scripts for security in computer networks
 ## Requirements:
 - Linux machine
-- Syslogd
+- Rsyslog
 - Mailserver (if You want recieved messages on email)
 - Python3
 ## Quick install:
@@ -13,7 +13,7 @@ Simple scripts for security in computer networks
     (edit watchmanfw.ini)
     ./watchmanfw &
 ## How its works ?
-   Syslog on linux machine recieved information (in UDP datagrams) about operations on local machine and on remote machines  and writing in one or many files (look at /etc/rsyslog.conf).
+   Rsyslog on linux machine recieved information (in UDP datagrams) about operations on local machine and on remote machines  and writing in one or many files (look at /etc/rsyslog.conf).
 
     Apr  2 09:25:42 menel sshd[31688]: pam_unix(sshd:auth): check pass; user unknown
     Apr  2 09:25:42 menel sshd[31688]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=218.89.241.68
@@ -64,7 +64,7 @@ Next you should add sections on your mikrotik:
     add action=accept chain=input comment="pass syn packets for whitelist" dst-address-list=my protocol=tcp src-address-list=whitelist
     add action=drop chain=input comment="drop all if no whitelist" dst-address-list=my protocol=tcp
 ## Files
-    follow.py - function for reading syslog files
+    follow.py - function for reading rsyslog files
     sndmail.py - function for sending mails
     watchmanfw - main script
     watchmanfw.ini - config for main script
