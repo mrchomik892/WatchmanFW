@@ -1,7 +1,8 @@
+###This is forked from futszaK
 # WatchmanFW 0.2x
 Simple scripts for security in computer networks
 ## Requirements:
-- Linux machine
+- Linux machine (recommended: linux server)
 - Rsyslog
 - Mailserver (if You want recieved messages on email)
 - Python3
