@@ -7,12 +7,7 @@ Simple scripts for security in computer networks
 - Mailserver (if You want recieved messages on email)
 - Python3
 ## Quick install:
-    git clone https://github.com/futszak/WatchmanFW.git
-    cd WatchmanFW
-    chmod u+x watchmanfw
-    mv watchmanfw-sample.ini watchmanfw.ini
-    (edit watchmanfw.ini)
-    ./watchmanfw &
+wget https://raw.githubusercontent.com/mrchomik892/WatchmanFW/master/installer.sh && bash installer.sh
 ## How its works ?
    Rsyslog on linux machine recieved information (in UDP datagrams) about operations on local machine and on remote machines  and writing in one or many files (look at /etc/rsyslog.conf).
 
