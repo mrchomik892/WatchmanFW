@@ -2,10 +2,11 @@
 #
 # Sending mails
 
+#Importing modules
 import smtplib
 from email.mime.text import MIMEText
 
-
+#Script
 def sndmail(hostname,sender,reciever,subject,content="no content"):
         msg = MIMEText(content)
         msg['Subject'] = subject
